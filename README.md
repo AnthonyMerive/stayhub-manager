@@ -1,7 +1,4 @@
 # 🏨 StayHub Manager
-
-[![CI Pipeline](https://github.com/anthonymerive/stayhub-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/usuario/stayhub-manager/actions/workflows/ci.yml)
-[![Production Pipeline](https://github.com/anthonymerive/stayhub-manager/actions/workflows/production.yml/badge.svg)](https://github.com/usuario/stayhub-manager/actions/workflows/production.yml)
 [![.NET 9](https://img.shields.io/badge/.NET-9.0-purple.svg)](https://dotnet.microsoft.com/download/dotnet/9.0)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
