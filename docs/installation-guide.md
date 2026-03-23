@@ -20,7 +20,31 @@
 
 ## 🚀 Instalación Rápida con Docker
 
-### 📦 Opción 1: Docker Compose (Recomendada)
+### ⚡ **Método Recomendado: Script Automático**
+
+**La forma más fácil de instalar StayHub Manager:**
+
+```powershell
+# 1. Clonar el repositorio
+git clone https://github.com/company/stayhub-manager.git
+cd stayhub-manager
+
+# 2. Ejecutar script de inicialización automática
+.\start-with-init.ps1
+```
+
+**¡Eso es todo!** 🎉 El script automáticamente:
+- ✅ Verifica prerrequisitos
+- ✅ Configura variables de entorno
+- ✅ Inicia todos los servicios
+- ✅ Ejecuta scripts de inicialización de BD
+- ✅ Verifica que todo funcione
+
+👉 **Ver guía detallada:** [Guía de Inicio Rápido](./quick-start-guide.md)
+
+### 📦 Método Manual: Docker Compose
+
+Si prefieres más control sobre el proceso:
 
 ```bash
 # 1. Clonar el repositorio

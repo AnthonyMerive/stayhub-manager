@@ -2,9 +2,20 @@
 
 Sistema de gestión hotelera desarrollado con .NET 9 siguiendo principios de arquitectura limpia y patrones modernos de desarrollo.
 
+## 🚀 **¡Nuevo! Inicio Rápido**
+
+**¿Quieres tener StayHub funcionando en menos de 5 minutos?**
+👉 **[Guía de Inicio Rápido](./quick-start-guide.md)** 👈
+
+Un solo comando ejecuta todo:
+```powershell
+.\start-with-init.ps1
+```
+
 ## 📑 Índice de Documentación
 
 ### 📋 Información General
+- ⚡ **[Guía de Inicio Rápido](./quick-start-guide.md)** - ¡Funcionando en 5 minutos!
 - [🏨 **Descripción del Proyecto**](./project-overview.md) - Propósito, características y visión general
 - [🏗️ **Arquitectura del Sistema**](./architecture.md) - Estructura, patrones y decisiones arquitecturales
 - [⚙️ **Instalación y Configuración**](./installation-guide.md) - Guía completa de instalación
