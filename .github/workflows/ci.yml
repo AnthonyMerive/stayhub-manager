@@ -52,13 +52,7 @@ jobs:
     # Ejecución de pruebas unitarias con cobertura
     - name: 🧪 Run unit tests
       run: |
-        dotnet test tests/StayHub.UnitTests/StayHub.UnitTests.csproj \
-          --no-build \
-          --configuration Release \
-          --verbosity normal \
-          --collect:"XPlat Code Coverage" \
-          --results-directory ./coverage \
-          --logger "trx;LogFileName=test-results.trx"
+        dotnet test tests/StayHub.UnitTests/StayHub.UnitTests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage" --results-directory ./coverage --logger "trx;LogFileName=test-results.trx"
 
     # Upload de resultados de pruebas (solo en Ubuntu para evitar duplicados)
     - name: 📊 Upload test results

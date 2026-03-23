@@ -53,11 +53,7 @@ jobs:
     # Pruebas esenciales
     - name: 🧪 Run essential tests
       run: |
-        dotnet test tests/StayHub.UnitTests/StayHub.UnitTests.csproj \
-          --no-build \
-          --configuration Debug \
-          --verbosity minimal \
-          --logger "console;verbosity=normal"
+        dotnet test tests/StayHub.UnitTests/StayHub.UnitTests.csproj --no-build --configuration Debug --verbosity minimal --logger "console;verbosity=normal"
 
   # ============================================
   # Job 2: Code Quality Check
@@ -93,19 +89,20 @@ jobs:
 
     # Análisis de código básico
     - name: 🔍 Basic code analysis
+      shell: pwsh
       run: |
-        echo "🔍 Running basic code analysis..."
+        Write-Host "🔍 Running basic code analysis..."
         # Verificar warnings como errores en modo Debug
-        dotnet build --configuration Debug --verbosity normal | tee build.log
+        dotnet build --configuration Debug --verbosity normal > build.log 2>&1
 
         # Contar warnings
-        WARNING_COUNT=$(grep -c "warning" build.log || echo "0")
-        echo "⚠️ Warnings found: $WARNING_COUNT"
+        $warningCount = (Select-String -Path "build.log" -Pattern "warning" | Measure-Object).Count
+        Write-Host "⚠️ Warnings found: $warningCount"
 
-        if [ "$WARNING_COUNT" -gt 10 ]; then
-          echo "❌ Too many warnings ($WARNING_COUNT). Please fix before merging."
+        if ($warningCount -gt 10) {
+          Write-Host "❌ Too many warnings ($warningCount). Please fix before merging."
           exit 1
-        fi
+        }
       continue-on-error: true
 
   # ============================================
