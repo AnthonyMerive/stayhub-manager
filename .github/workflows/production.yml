@@ -1,0 +1,208 @@
+name: 🚀 Production Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+  # Permitir ejecución manual
+  workflow_dispatch:
+
+jobs:
+  # ============================================
+  # Job 1: Comprehensive Testing
+  # ============================================
+  comprehensive-test:
+    name: 🎯 Comprehensive Testing
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: 🔧 Setup .NET 9.0.x
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: 📦 Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+
+    - name: 📥 Restore dependencies
+      run: dotnet restore
+
+    - name: 🏗️ Build solution
+      run: dotnet build --no-restore --configuration Release
+
+    # Ejecutar todas las pruebas con cobertura detallada
+    - name: 🧪 Run comprehensive tests
+      run: |
+        dotnet test tests/StayHub.UnitTests/StayHub.UnitTests.csproj \
+          --no-build \
+          --configuration Release \
+          --verbosity normal \
+          --collect:"XPlat Code Coverage" \
+          --results-directory ./coverage \
+          --logger "trx;LogFileName=production-tests.trx" \
+          --logger "console;verbosity=detailed"
+
+    # Generar reporte de cobertura en HTML
+    - name: 📊 Generate coverage report
+      run: |
+        dotnet tool install -g dotnet-reportgenerator-globaltool
+        reportgenerator \
+          -reports:"./coverage/**/coverage.cobertura.xml" \
+          -targetdir:"./coverage/html" \
+          -reporttypes:"Html;Badges" \
+          -assemblyfilters:"+StayHub.*"
+      continue-on-error: true
+
+    - name: 📈 Upload coverage artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-coverage
+        path: |
+          ./coverage/html/
+          ./coverage/production-tests.trx
+        retention-days: 30
+
+  # ============================================
+  # Job 2: Release Build Validation
+  # ============================================
+  release-validation:
+    name: 🔍 Release Validation
+    runs-on: ubuntu-latest
+    needs: comprehensive-test
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 🔧 Setup .NET 9.0.x
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: 📥 Restore dependencies
+      run: dotnet restore
+
+    # Build optimizado para Release
+    - name: 🏗️ Release build
+      run: |
+        dotnet build \
+          --configuration Release \
+          --no-restore \
+          --verbosity minimal \
+          -p:TreatWarningsAsErrors=true \
+          -p:WarningsAsErrors="" \
+          -p:WarningsNotAsErrors=""
+
+    # Publicación para verificar que no hay errores
+    - name: 📦 Test publish
+      run: |
+        dotnet publish src/StayHub.Host/StayHub.Host.csproj \
+          --configuration Release \
+          --no-build \
+          --output ./publish \
+          --verbosity minimal
+
+    - name: ✅ Validate published files
+      run: |
+        echo "📁 Published files:"
+        ls -la ./publish/
+        echo ""
+        echo "🔍 Checking essential files..."
+        if [ -f "./publish/StayHub.Host.dll" ]; then
+          echo "✅ Main assembly found"
+        else
+          echo "❌ Main assembly missing"
+          exit 1
+        fi
+
+  # ============================================
+  # Job 3: Documentation Validation
+  # ============================================
+  docs-validation:
+    name: 📚 Documentation Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+
+    - name: 📚 Validate documentation
+      run: |
+        echo "🔍 Checking documentation files..."
+
+        # Verificar README principal
+        if [ -f "README.md" ]; then
+          echo "✅ Main README.md exists"
+        else
+          echo "❌ Main README.md missing"
+          exit 1
+        fi
+
+        # Verificar documentación del proyecto
+        if [ -d "docs" ]; then
+          echo "✅ docs directory exists"
+          echo "📁 Documentation files:"
+          find docs -name "*.md" -type f | head -10
+        else
+          echo "⚠️ No docs directory found"
+        fi
+
+        # Verificar .gitignore
+        if [ -f ".gitignore" ]; then
+          echo "✅ .gitignore exists"
+        else
+          echo "❌ .gitignore missing"
+        fi
+
+  # ============================================
+  # Job 4: Production Ready Summary
+  # ============================================
+  production-summary:
+    name: 🎯 Production Summary
+    runs-on: ubuntu-latest
+    needs: [comprehensive-test, release-validation, docs-validation]
+    if: always()
+
+    steps:
+    - name: 📋 Generate production summary
+      run: |
+        echo "# 🚀 Production Pipeline Results" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 📊 Pipeline Status" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "| Stage | Status | Description |" >> $GITHUB_STEP_SUMMARY
+        echo "|-------|--------|-------------|" >> $GITHUB_STEP_SUMMARY
+        echo "| 🧪 Comprehensive Tests | ${{ needs.comprehensive-test.result == 'success' && '✅ Passed' || '❌ Failed' }} | Full test suite with coverage |" >> $GITHUB_STEP_SUMMARY
+        echo "| 🔍 Release Validation | ${{ needs.release-validation.result == 'success' && '✅ Passed' || '❌ Failed' }} | Build and publish checks |" >> $GITHUB_STEP_SUMMARY
+        echo "| 📚 Documentation | ${{ needs.docs-validation.result == 'success' && '✅ Passed' || '❌ Failed' }} | Documentation completeness |" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+
+        if [[ "${{ needs.comprehensive-test.result }}" == "success" && "${{ needs.release-validation.result }}" == "success" && "${{ needs.docs-validation.result }}" == "success" ]]; then
+          echo "## 🎉 Ready for Production!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All checks passed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Code coverage reports available" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Release build validated" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Documentation complete" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "## ⚠️ Issues Detected" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Please check the failed jobs and fix issues before production deployment." >> $GITHUB_STEP_SUMMARY
+        fi
+
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "## 📈 Metrics" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Workflow:** Production Pipeline" >> $GITHUB_STEP_SUMMARY
