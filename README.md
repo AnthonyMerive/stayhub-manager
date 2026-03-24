@@ -238,7 +238,6 @@ Consulta la **[documentación técnica completa](./docs/README.md)** que incluye
 - ⚙️ **[Installation Guide](./docs/installation-guide.md)** - Guía completa de instalación
 - 📜 **[Business Rules](./docs/business-rules.md)** - Especificaciones BR-01 a BR-06
 - 🔌 **[API Reference](./docs/api-reference.md)** - Documentación completa de endpoints
-- 🔍 **[Traceability System](./docs/Trazabilidad-Unificada.md)** - Sistema de trazabilidad unificado
 
 ## 🛠️ Troubleshooting
 
@@ -388,46 +387,4 @@ El sistema implementa **6 reglas de negocio principales**:
 - **BR-06**: Políticas de cancelación
 
 > Consulta [Business Rules](./docs/business-rules.md) para especificaciones completas.
-
-## 🤝 Contribuir
-
-1. **Fork** el repositorio
-2. Crear **feature branch**: `git checkout -b feature/nueva-funcionalidad`
-3. **Commit** cambios: `git commit -m 'feat: nueva funcionalidad'`
-4. **Push** a la branch: `git push origin feature/nueva-funcionalidad`
-5. Crear **Pull Request**
-
-### **Convenciones de Commit**
-```
-feat:     Nueva funcionalidad
-fix:      Corrección de bug  
-docs:     Cambios en documentación
-style:    Cambios de formato (no afectan lógica)
-refactor: Refactoring de código
-test:     Agregar o modificar tests
-chore:    Cambios en build o herramientas
-```
-
-## 📄 Licencia
-
-Este proyecto está licenciado bajo la **MIT License** - consulta el archivo [LICENSE](LICENSE) para más detalles.
-
-## 🆘 Soporte
-
-- 🐛 **Issues**: [GitHub Issues](https://github.com/anthonymerive/stayhub-manager/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/anthonymerive/stayhub-manager/discussions)  
-- 📧 **Email**: stayhub-support@company.com
-
-## 📈 Roadmap
-
-### **v1.1** (Q1 2026)
-- [ ] Sistema de notificaciones en tiempo real
-- [ ] API para integraciones externas
-- [ ] Dashboard administrativo avanzado
-
-### **v2.0** (Q2 2026)
-- [ ] Microservicios con message brokers
-- [ ] Implementación de CQRS completo
-- [ ] Sistema de métricas y analytics
-
 ---
