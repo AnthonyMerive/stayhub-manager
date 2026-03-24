@@ -130,7 +130,7 @@ cat scripts/init-db/01-init.sql | docker exec -i stayhub-db /opt/mssql-tools18/b
 #### **Windows**
 ```powershell
 # 1. Clonar el repositorio
-git clone https://github.com/usuario/stayhub-manager.git
+git clone https://github.com/anthonymerive/stayhub-manager.git
 cd stayhub-manager
 
 # 2. Ejecutar script de inicialización
@@ -142,7 +142,7 @@ cd stayhub-manager
 #### **macOS / Linux**
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/usuario/stayhub-manager.git
+git clone https://github.com/anthonymerive/stayhub-manager.git
 cd stayhub-manager
 
 # 2. Dar permisos de ejecución y ejecutar
@@ -414,8 +414,8 @@ Este proyecto está licenciado bajo la **MIT License** - consulta el archivo [LI
 
 ## 🆘 Soporte
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/usuario/stayhub-manager/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/usuario/stayhub-manager/discussions)  
+- 🐛 **Issues**: [GitHub Issues](https://github.com/anthonymerive/stayhub-manager/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/anthonymerive/stayhub-manager/discussions)  
 - 📧 **Email**: stayhub-support@company.com
 
 ## 📈 Roadmap
