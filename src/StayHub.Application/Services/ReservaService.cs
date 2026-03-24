@@ -20,6 +20,14 @@ public class ReservaService(
     ITraceability traceability) : IReservaService
 {
 
+    /// <summary>
+    /// Obtiene una reserva por su identificador único
+    /// </summary>
+    /// <param name="reservaId">Identificador único de la reserva</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <returns>La reserva encontrada o null si no existe</returns>
+    /// <exception cref="BusinessException">Si el ID de la reserva es inválido</exception>
+    /// <exception cref="DatabaseException">Si ocurre un error en la base de datos</exception>
     public async Task<Reserva?> GetByIdAsync(int reservaId, string transactionId)
     {
         const string operation = nameof(GetByIdAsync);
@@ -70,6 +78,14 @@ public class ReservaService(
         }
     }
 
+    /// <summary>
+    /// Obtiene todas las reservas de un hotel específico
+    /// </summary>
+    /// <param name="hotelId">Identificador único del hotel</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <returns>Lista de reservas del hotel</returns>
+    /// <exception cref="BusinessException">Si el ID del hotel es inválido</exception>
+    /// <exception cref="DatabaseException">Si ocurre un error en la base de datos</exception>
     public async Task<List<Reserva>> GetByHotelIdAsync(int hotelId, string transactionId)
     {
         const string operation = nameof(GetByHotelIdAsync);

@@ -17,6 +17,14 @@ public class HabitacionService(
     IHotelRepository hotelRepository,
     ITraceability traceability) : IHabitacionService
 {
+    /// <summary>
+    /// Obtiene una habitación por su identificador único
+    /// </summary>
+    /// <param name="habitacionId">Identificador único de la habitación</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <returns>La habitación encontrada o null si no existe</returns>
+    /// <exception cref="BusinessException">Si el ID de la habitación es inválido</exception>
+    /// <exception cref="DatabaseException">Si ocurre un error en la base de datos</exception>
     public async Task<Habitacion?> GetByIdAsync(int habitacionId, string transactionId)
     {
         var operation = nameof(GetByIdAsync);
@@ -68,6 +76,14 @@ public class HabitacionService(
         }
     }
 
+    /// <summary>
+    /// Obtiene todas las habitaciones de un hotel específico
+    /// </summary>
+    /// <param name="hotelId">Identificador único del hotel</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <returns>Lista de habitaciones del hotel</returns>
+    /// <exception cref="BusinessException">Si el ID del hotel es inválido</exception>
+    /// <exception cref="DatabaseException">Si ocurre un error en la base de datos</exception>
     public async Task<List<Habitacion>> GetByHotelIdAsync(int hotelId, string transactionId)
     {
         var operation = nameof(GetByHotelIdAsync);
@@ -118,6 +134,16 @@ public class HabitacionService(
         }
     }
 
+    /// <summary>
+    /// Obtiene habitaciones paginadas con filtro opcional por hotel
+    /// </summary>
+    /// <param name="pageNumber">Número de página (basado en 1)</param>
+    /// <param name="pageSize">Tamaño de la página</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <param name="hotelId">Identificador opcional del hotel para filtrar</param>
+    /// <returns>Objeto de paginación con las habitaciones encontradas</returns>
+    /// <exception cref="BusinessException">Si los parámetros de paginación o el ID del hotel son inválidos</exception>
+    /// <exception cref="DatabaseException">Si ocurre un error en la base de datos</exception>
     public async Task<Pagination<Habitacion>> GetPaginatedAsync(int pageNumber, int pageSize, string transactionId, int? hotelId = null)
     {
         var operation = nameof(GetPaginatedAsync);
@@ -177,6 +203,14 @@ public class HabitacionService(
         }
     }
 
+    /// <summary>
+    /// Crea una nueva habitación en el sistema
+    /// </summary>
+    /// <param name="habitacion">Datos de la habitación a crear</param>
+    /// <param name="transactionId">Identificador de transacción para trazabilidad</param>
+    /// <returns>La habitación creada con su ID asignado</returns>
+    /// <exception cref="BusinessException">Si hay violación de reglas de negocio</exception>
+    /// <exception cref="DatabaseException">Si hay error en repositorio</exception>
     public async Task<Habitacion> CreateAsync(Habitacion habitacion, string transactionId)
     {
         var operation = nameof(CreateAsync);
