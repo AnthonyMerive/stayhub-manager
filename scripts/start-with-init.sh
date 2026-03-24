@@ -370,5 +370,5 @@ echo -e "     ${GRAY}Database: StayHubDb | User: sa${NC}"
 echo -e "     ${GRAY}Driver Properties: trustServerCertificate=true${NC}"
 
 echo ""
-print_success "¡Todo listo para desarrollar con StayHub Manager!"
+print_success "¡StayHub Manager iniciado con exito!"
 echo ""
